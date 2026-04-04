@@ -17,39 +17,3 @@ body {
 .explore-mode .react-flow__pane { cursor: default !important; }
 .react-flow__edge-path { stroke-opacity: 0.3; }
 
-/* Controls — dark theme */
-.react-flow__controls {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.react-flow__controls-button {
-  background: #0d0d0d !important;
-  border: 1px solid #1e293b !important;
-  border-radius: 6px !important;
-  color: #64748b !important;
-  fill: #64748b !important;
-  width: 28px !important;
-  height: 28px !important;
-  padding: 5px !important;
-  box-shadow: 0 0 0 1px #0a0a0a !important;
-  transition: border-color 0.15s, color 0.15s, fill 0.15s !important;
-}
-
-.react-flow__controls-button:hover {
-  background: #111827 !important;
-  border-color: #0078D4 !important;
-  color: #0078D4 !important;
-  fill: #0078D4 !important;
-}
-
-.react-flow__controls-button svg {
-  fill: inherit !important;
-  color: inherit !important;
-  max-width: 12px;
-  max-height: 12px;
-}

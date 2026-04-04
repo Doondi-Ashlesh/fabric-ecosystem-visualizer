@@ -288,6 +288,37 @@ export default function EcosystemGraph({
       >
         <Background variant={BackgroundVariant.Dots} gap={28} size={1} color="#1e293b" />
         <Controls showInteractive={false} />
+        {/* Scoped style — overrides RF's own stylesheet which loads after globals.css */}
+        <style>{`
+          .react-flow__controls {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            gap: 4px;
+          }
+          .react-flow__controls-button {
+            background: #0d0d0d !important;
+            border: 1px solid #1e293b !important;
+            border-radius: 6px !important;
+            width: 28px !important;
+            height: 28px !important;
+            padding: 5px !important;
+            color: #475569 !important;
+            fill: #475569 !important;
+            box-shadow: none !important;
+            transition: border-color 0.15s, fill 0.15s !important;
+          }
+          .react-flow__controls-button:hover {
+            background: #0f172a !important;
+            border-color: #0078D4 !important;
+            fill: #0078D4 !important;
+          }
+          .react-flow__controls-button svg {
+            fill: inherit !important;
+            width: 12px !important;
+            height: 12px !important;
+          }
+        `}</style>
       </ReactFlow>
 
       {/* Hover tooltip — default / workflow modes */}
