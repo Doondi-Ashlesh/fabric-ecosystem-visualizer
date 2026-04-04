@@ -6,7 +6,7 @@ import { Menu } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
 import EcosystemGraph from '@/components/EcosystemGraph';
 import { LAYER_ORDER, LAYER_LABELS, LAYER_SUBLABELS, LAYER_COLORS } from '@/types/ecosystem';
-import type { AppMode, Service, Workflow } from '@/types/ecosystem';
+import type { AppMode, Layer, Service, Workflow } from '@/types/ecosystem';
 import { FABRIC_SERVICES } from '@/data/fabric';
 
 const FABRIC_BLUE = '#0078D4';
@@ -18,6 +18,7 @@ export default function Home() {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [hoveredService, setHoveredService]   = useState<Service | null>(null);
   const [sidebarOpen, setSidebarOpen]         = useState(false);
+  const [focusLayer, setFocusLayer]           = useState<Layer | null>(null);
 
   const handleSelectWorkflow = useCallback((wf: Workflow) => {
     setActiveWorkflow(wf);
@@ -129,9 +130,16 @@ export default function Home() {
           {LAYER_ORDER.map((layer) => {
             const count = FABRIC_SERVICES.filter((s) => s.layer === layer).length;
             const color = LAYER_COLORS[layer];
+            const isHovered = focusLayer === layer;
             return (
-              <div key={layer} className="flex-1 flex flex-col items-center justify-center px-2 border-r border-[#1a1a1a] last:border-r-0">
-                <p className="text-[11px] font-bold tracking-wide truncate" style={{ color }}>
+              <div
+                key={layer}
+                className="flex-1 flex flex-col items-center justify-center px-2 border-r border-[#1a1a1a] last:border-r-0 cursor-pointer transition-colors duration-150"
+                style={{ background: isHovered ? `${color}10` : 'transparent' }}
+                onMouseEnter={() => setFocusLayer(layer)}
+                onMouseLeave={() => setFocusLayer(null)}
+              >
+                <p className="text-[11px] font-bold tracking-wide truncate transition-colors duration-150" style={{ color: isHovered ? color : `${color}bb` }}>
                   {LAYER_LABELS[layer]}
                 </p>
                 <p className="text-[9px] text-slate-600 truncate">{LAYER_SUBLABELS[layer]}</p>
@@ -148,6 +156,7 @@ export default function Home() {
               mode={mode}
               activeWorkflow={activeWorkflow}
               activeStepIndex={activeStepIndex}
+              focusLayer={focusLayer}
               onHoverService={setHoveredService}
               onClickService={handleClickService}
             />

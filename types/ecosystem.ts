@@ -92,8 +92,11 @@ export const LAYER_COLORS: Record<Layer, string> = {
 
 export interface ServiceNodeData {
   service: Service;
-  isActive: boolean;
+  isHighlighted: boolean;
+  isDimmed: boolean;
+  isActiveStep: boolean;
   stepNumber?: number;
   isExploreMode: boolean;
+  onHover?: (service: Service | null) => void;
   [key: string]: unknown;
 }
