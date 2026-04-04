@@ -51,7 +51,7 @@ function ServiceNodeComponent({ data }: NodeProps) {
   return (
     <motion.div
       className="relative select-none"
-      style={{ width: NODE_W + 4, height: NODE_H + 4, cursor: 'pointer' }}
+      style={{ width: NODE_W + 4, height: NODE_H + 4, cursor: 'pointer', willChange: 'transform, filter, opacity' }}
       animate={{
         opacity: isDimmed ? 0.38 : 1,
         filter:  isDimmed ? 'grayscale(0.6) brightness(0.5)' : glowFilter,
@@ -132,4 +132,16 @@ function ServiceNodeComponent({ data }: NodeProps) {
   );
 }
 
-export default memo(ServiceNodeComponent);
+// Custom comparator — ignores callback refs so memo() actually prevents re-renders
+export default memo(ServiceNodeComponent, (prev, next) => {
+  const pd = prev.data as ServiceNodeData;
+  const nd = next.data as ServiceNodeData;
+  return (
+    pd.service.id    === nd.service.id    &&
+    pd.isHighlighted === nd.isHighlighted &&
+    pd.isDimmed      === nd.isDimmed      &&
+    pd.isActiveStep  === nd.isActiveStep  &&
+    pd.stepNumber    === nd.stepNumber    &&
+    pd.isExploreMode === nd.isExploreMode
+  );
+});

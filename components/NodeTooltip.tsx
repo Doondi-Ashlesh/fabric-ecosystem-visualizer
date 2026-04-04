@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, X } from 'lucide-react';
 import { LAYER_LABELS, LAYER_COLORS, type Service } from '@/types/ecosystem';
@@ -15,6 +16,7 @@ interface NodeTooltipProps {
 const EDGE_MARGIN = 12;
 
 export default function NodeTooltip({ service, x, y, isExploreMode = false, onClose }: NodeTooltipProps) {
+  // Read viewport once per mount — not on every render
   const vw = typeof window !== 'undefined' ? window.innerWidth  : 1440;
   const vh = typeof window !== 'undefined' ? window.innerHeight : 900;
   const color = LAYER_COLORS[service.layer];
@@ -22,12 +24,16 @@ export default function NodeTooltip({ service, x, y, isExploreMode = false, onCl
   const TOOLTIP_W = isExploreMode ? 360 : 300;
   const TOOLTIP_H = isExploreMode ? 260 : 220;
 
-  const flipX   = x + 24 + TOOLTIP_W > vw - EDGE_MARGIN;
-  const rawLeft = flipX ? x - TOOLTIP_W - 16 : x + 24;
-  const left    = Math.min(Math.max(rawLeft, EDGE_MARGIN), vw - TOOLTIP_W - EDGE_MARGIN);
-  const flipY   = y + TOOLTIP_H + 20 > vh - EDGE_MARGIN;
-  const rawTop  = flipY ? y - TOOLTIP_H - 10 : y - 14;
-  const top     = Math.max(rawTop, EDGE_MARGIN);
+  // Memoize position — only recalculate when x/y/vw/vh change
+  const { left, top, flipY } = useMemo(() => {
+    const fX     = x + 24 + TOOLTIP_W > vw - EDGE_MARGIN;
+    const rawL   = fX ? x - TOOLTIP_W - 16 : x + 24;
+    const l      = Math.min(Math.max(rawL, EDGE_MARGIN), vw - TOOLTIP_W - EDGE_MARGIN);
+    const fY     = y + TOOLTIP_H + 20 > vh - EDGE_MARGIN;
+    const rawT   = fY ? y - TOOLTIP_H - 10 : y - 14;
+    const t      = Math.max(rawT, EDGE_MARGIN);
+    return { left: l, top: t, flipY: fY };
+  }, [x, y, vw, vh, TOOLTIP_W, TOOLTIP_H]);
 
   /* ── EXPLORE MODE — glass slab ──────────────────────────────────────────── */
   if (isExploreMode) {
@@ -39,7 +45,7 @@ export default function NodeTooltip({ service, x, y, isExploreMode = false, onCl
         exit={{ opacity: 0, scale: 0.96 }}
         transition={{ duration: 0.14, ease: 'easeOut' }}
         className="fixed z-[9999] select-none"
-        style={{ pointerEvents: 'auto', left, top, width: TOOLTIP_W }}
+        style={{ pointerEvents: 'auto', left: 0, top: 0, width: TOOLTIP_W, willChange: 'transform, opacity', transform: `translate(${left}px, ${top}px)` }}
       >
         <div style={{
           background: 'rgba(0,0,0,0.88)',
@@ -101,7 +107,7 @@ export default function NodeTooltip({ service, x, y, isExploreMode = false, onCl
       exit={{ opacity: 0, scale: 0.94 }}
       transition={{ duration: 0.1, ease: 'easeOut' }}
       className="fixed z-[9999] select-none"
-      style={{ pointerEvents: 'none', left, top, width: TOOLTIP_W }}
+      style={{ pointerEvents: 'none', left: 0, top: 0, width: TOOLTIP_W, willChange: 'transform, opacity', transform: `translate(${left}px, ${top}px)` }}
     >
       <div className="relative overflow-hidden" style={{
         background: 'rgba(5,5,5,0.97)',

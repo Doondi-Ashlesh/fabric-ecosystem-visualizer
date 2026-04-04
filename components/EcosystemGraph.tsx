@@ -53,6 +53,8 @@ export default function EcosystemGraph({
 
   // Track prev focusLayer to detect null transition
   const prevFocusLayer = useRef<Layer | null>(null);
+  // Debounce timer for focusLayer fitView — prevents animation queuing when hovering quickly
+  const focusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Sort services by INTRA_LAYER_ORDER
   const sortedServices = useMemo(() => {
@@ -74,17 +76,27 @@ export default function EcosystemGraph({
     return new Set(activeWorkflow.steps.map((s) => s.serviceId));
   }, [activeWorkflow]);
 
+  // RAF ref — throttles tooltip state to one update per animation frame
+  const rafRef = useRef<number | null>(null);
+
   // Callbacks passed through node data (stable refs)
   const handleNodeHover = useCallback((service: Service | null) => {
     if (mode !== 'explore') {
       onHoverService(service);
-      if (!service) setHoverTooltip(null);
+      if (!service) {
+        if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+        setHoverTooltip(null);
+      }
     }
   }, [mode, onHoverService]);
 
   const handleNodeMouseMove = useCallback((service: Service, x: number, y: number) => {
     if (mode !== 'explore') {
-      setHoverTooltip({ service, x, y });
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        setHoverTooltip({ service, x, y });
+        rafRef.current = null;
+      });
     }
   }, [mode]);
 
@@ -182,20 +194,23 @@ export default function EcosystemGraph({
     }
   }, [mode, fitView]);
 
-  // Zoom to focused layer (header hover) or reset to full
+  // Zoom to focused layer (header hover) or reset to full — debounced 120ms
   useEffect(() => {
-    if (focusLayer) {
-      const layerNodeIds = FABRIC_SERVICES
-        .filter((s) => s.layer === focusLayer)
-        .map((s) => ({ id: s.id }));
-      if (layerNodeIds.length > 0) {
-        fitView({ nodes: layerNodeIds, duration: 450, padding: 0.25, maxZoom: 1.5 });
+    if (focusTimerRef.current) clearTimeout(focusTimerRef.current);
+    focusTimerRef.current = setTimeout(() => {
+      if (focusLayer) {
+        const layerNodeIds = FABRIC_SERVICES
+          .filter((s) => s.layer === focusLayer)
+          .map((s) => ({ id: s.id }));
+        if (layerNodeIds.length > 0) {
+          fitView({ nodes: layerNodeIds, duration: 450, padding: 0.25, maxZoom: 1.5 });
+        }
+      } else if (prevFocusLayer.current !== null) {
+        fitView({ duration: 400, padding: 0.08 });
       }
-    } else if (prevFocusLayer.current !== null) {
-      // Layer was focused, now released — reset
-      fitView({ duration: 400, padding: 0.08 });
-    }
-    prevFocusLayer.current = focusLayer;
+      prevFocusLayer.current = focusLayer;
+    }, 120);
+    return () => { if (focusTimerRef.current) clearTimeout(focusTimerRef.current); };
   }, [focusLayer, fitView]);
 
   const handleNodeClick = useCallback(
