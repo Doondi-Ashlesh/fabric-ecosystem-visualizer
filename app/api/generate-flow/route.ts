@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Groq from 'groq-sdk';
+import OpenAI from 'openai';
 import { FABRIC_SERVICES } from '@/data/fabric';
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const client = new OpenAI({
+  baseURL: 'https://models.inference.ai.azure.com',
+  apiKey: process.env.GITHUB_TOKEN,
+});
 
 const SERVICE_IDS = FABRIC_SERVICES.map((s) => s.id).join(', ');
 
@@ -45,8 +48,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+    const completion = await client.chat.completions.create({
+      model: 'Phi-4',
       temperature: 0.1,
       max_tokens: 1024,
       response_format: { type: 'json_object' },
