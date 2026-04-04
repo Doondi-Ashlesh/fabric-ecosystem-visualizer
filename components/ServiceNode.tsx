@@ -3,7 +3,7 @@
 import { memo, useState } from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { motion } from 'framer-motion';
-import type { Service, ServiceNodeData } from '@/types/ecosystem';
+import type { Service, ServiceNodeData, Layer } from '@/types/ecosystem';
 import { LAYER_COLORS } from '@/types/ecosystem';
 
 const NODE_W = 130;
@@ -17,6 +17,7 @@ function ServiceNodeComponent({ data }: NodeProps) {
     isDimmed,
     isActiveStep,
     isExploreMode,
+    focusLayer,
     onHover,
     onMouseMove,
   } = data as ServiceNodeData & {
@@ -25,6 +26,10 @@ function ServiceNodeComponent({ data }: NodeProps) {
 
   const [hovered, setHovered] = useState(false);
   const color = LAYER_COLORS[(service as Service).layer];
+
+  // Layer focus states — when a layer header is hovered
+  const isLayerFocused = (focusLayer as Layer | null) !== null && (service as Service).layer === (focusLayer as Layer);
+  const isLayerDimmed  = (focusLayer as Layer | null) !== null && !isLayerFocused;
 
   const borderColor = isActiveStep
     ? color
@@ -42,6 +47,8 @@ function ServiceNodeComponent({ data }: NodeProps) {
 
   const glowFilter = isActiveStep
     ? `drop-shadow(0 0 14px ${color}) drop-shadow(0 0 28px ${color}80)`
+    : isLayerFocused
+    ? `drop-shadow(0 0 12px ${color}90) drop-shadow(0 0 4px ${color}60)`
     : isHighlighted
     ? `drop-shadow(0 0 8px ${color}70)`
     : hovered
@@ -53,9 +60,13 @@ function ServiceNodeComponent({ data }: NodeProps) {
       className="relative select-none"
       style={{ width: NODE_W + 4, height: NODE_H + 4, cursor: 'pointer', willChange: 'transform, filter, opacity' }}
       animate={{
-        opacity: isDimmed ? 0.38 : 1,
-        filter:  isDimmed ? 'grayscale(0.6) brightness(0.5)' : glowFilter,
-        scale:   hovered && !isDimmed ? 1.06 : 1,
+        opacity: isDimmed ? 0.38 : isLayerDimmed ? 0.12 : 1,
+        filter:  isDimmed
+          ? 'grayscale(0.6) brightness(0.5)'
+          : isLayerDimmed
+          ? 'grayscale(1) brightness(0.25)'
+          : glowFilter,
+        scale: hovered && !isDimmed && !isLayerDimmed ? 1.06 : isLayerFocused && !hovered ? 1.04 : 1,
       }}
       transition={{ duration: 0.22, ease: 'easeOut' }}
       onMouseEnter={(e) => {
@@ -142,6 +153,7 @@ export default memo(ServiceNodeComponent, (prev, next) => {
     pd.isDimmed      === nd.isDimmed      &&
     pd.isActiveStep  === nd.isActiveStep  &&
     pd.stepNumber    === nd.stepNumber    &&
-    pd.isExploreMode === nd.isExploreMode
+    pd.isExploreMode === nd.isExploreMode &&
+    pd.focusLayer    === nd.focusLayer
   );
 });

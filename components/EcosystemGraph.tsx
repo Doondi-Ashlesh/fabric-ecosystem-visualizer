@@ -79,26 +79,32 @@ export default function EcosystemGraph({
   // RAF ref — throttles tooltip state to one update per animation frame
   const rafRef = useRef<number | null>(null);
 
-  // Callbacks passed through node data (stable refs)
+  // Always-current mode ref — lets stable callbacks read mode without closing over it
+  // This fixes the stale-closure bug where memo'd ServiceNodes called old callbacks
+  // that had captured a previous mode value (e.g. 'initial') even after mode changed to 'explore'
+  const modeRef = useRef(mode);
+  modeRef.current = mode;
+
+  // Callbacks passed through node data — stable refs (no mode dep, use modeRef instead)
   const handleNodeHover = useCallback((service: Service | null) => {
-    if (mode !== 'explore') {
+    if (modeRef.current !== 'explore') {
       onHoverService(service);
       if (!service) {
         if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
         setHoverTooltip(null);
       }
     }
-  }, [mode, onHoverService]);
+  }, [onHoverService]);
 
   const handleNodeMouseMove = useCallback((service: Service, x: number, y: number) => {
-    if (mode !== 'explore') {
+    if (modeRef.current !== 'explore') {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         setHoverTooltip({ service, x, y });
         rafRef.current = null;
       });
     }
-  }, [mode]);
+  }, []);
 
   // Build nodes
   const nodes: Node<ServiceNodeData>[] = useMemo(() => {
@@ -135,6 +141,7 @@ export default function EcosystemGraph({
             isActiveStep,
             stepNumber,
             isExploreMode: mode === 'explore',
+            focusLayer,
             onHover: handleNodeHover,
             onMouseMove: handleNodeMouseMove,
           },
@@ -143,7 +150,7 @@ export default function EcosystemGraph({
     });
 
     return result;
-  }, [sortedServices, mode, activeStepServiceId, workflowServiceIds, activeWorkflow, handleNodeHover, handleNodeMouseMove]);
+  }, [sortedServices, mode, activeStepServiceId, workflowServiceIds, activeWorkflow, focusLayer, handleNodeHover, handleNodeMouseMove]);
 
   // Build edges — workflow path edges are animated + bright; others dimmed
   const edges: Edge[] = useMemo(() => {
@@ -155,11 +162,15 @@ export default function EcosystemGraph({
     }
 
     const result: Edge[] = [];
+    const addedEdgeIds = new Set<string>();
+
+    // Base edges from connections[]
     FABRIC_SERVICES.forEach((service) => {
       service.connections.forEach((targetId) => {
         if (!FABRIC_SERVICES.find((s) => s.id === targetId)) return;
         const edgeKey = `${service.id}-${targetId}`;
         const isWorkflowEdge = workflowEdgePairs.has(edgeKey);
+        addedEdgeIds.add(edgeKey);
         result.push({
           id: edgeKey,
           source: service.id,
@@ -175,6 +186,30 @@ export default function EcosystemGraph({
         });
       });
     });
+
+    // Synthetic edges for workflow steps not already in connections[]
+    // Ensures every consecutive step pair is always visually connected
+    if (activeWorkflow) {
+      for (let i = 0; i < activeWorkflow.steps.length - 1; i++) {
+        const src = activeWorkflow.steps[i].serviceId;
+        const tgt = activeWorkflow.steps[i + 1].serviceId;
+        const edgeKey = `${src}-${tgt}`;
+        if (!addedEdgeIds.has(edgeKey)) {
+          const srcService = FABRIC_SERVICES.find((s) => s.id === src);
+          const color = srcService ? LAYER_COLORS[srcService.layer] : '#0078D4';
+          result.push({
+            id: edgeKey,
+            source: src,
+            target: tgt,
+            type: 'smoothstep',
+            style: { stroke: color, strokeWidth: 2, opacity: 1 },
+            animated: true,
+            markerEnd: { type: 'arrowclosed' as const, color },
+          });
+        }
+      }
+    }
+
     return result;
   }, [activeWorkflow, mode]);
 
@@ -218,6 +253,7 @@ export default function EcosystemGraph({
       const service = FABRIC_SERVICES.find((s) => s.id === node.id);
       if (!service) return;
       if (mode === 'explore') {
+        setHoverTooltip(null); // clear any stale hover tooltip before showing explore card
         setExploreTooltip({ service, x: e.clientX, y: e.clientY });
         onClickService(service);
       } else {

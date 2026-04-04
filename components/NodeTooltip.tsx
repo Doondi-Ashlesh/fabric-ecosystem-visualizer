@@ -38,14 +38,16 @@ export default function NodeTooltip({ service, x, y, isExploreMode = false, onCl
   /* ── EXPLORE MODE — glass slab ──────────────────────────────────────────── */
   if (isExploreMode) {
     return (
+      // Outer div owns position — inner motion.div owns animation
+      // Keeping them separate prevents Framer Motion's y-transform from overwriting the position transform
+      <div className="fixed z-[9999] select-none" style={{ left, top, width: TOOLTIP_W, pointerEvents: 'auto' }}>
       <motion.div
         key={`explore-${service.id}`}
         initial={{ opacity: 0, y: flipY ? 8 : -8, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
         transition={{ duration: 0.14, ease: 'easeOut' }}
-        className="fixed z-[9999] select-none"
-        style={{ pointerEvents: 'auto', left: 0, top: 0, width: TOOLTIP_W, willChange: 'transform, opacity', transform: `translate(${left}px, ${top}px)` }}
+        style={{ willChange: 'transform, opacity' }}
       >
         <div style={{
           background: 'rgba(0,0,0,0.88)',
@@ -95,19 +97,20 @@ export default function NodeTooltip({ service, x, y, isExploreMode = false, onCl
           </div>
         </div>
       </motion.div>
+      </div>
     );
   }
 
   /* ── DEFAULT — compact HUD tooltip ─────────────────────────────────────── */
   return (
+    <div className="fixed z-[9999] select-none" style={{ left, top, width: TOOLTIP_W, pointerEvents: 'none' }}>
     <motion.div
       key={service.id}
       initial={{ opacity: 0, scale: 0.94, y: flipY ? 6 : -6 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.94 }}
       transition={{ duration: 0.1, ease: 'easeOut' }}
-      className="fixed z-[9999] select-none"
-      style={{ pointerEvents: 'none', left: 0, top: 0, width: TOOLTIP_W, willChange: 'transform, opacity', transform: `translate(${left}px, ${top}px)` }}
+      style={{ willChange: 'transform, opacity' }}
     >
       <div className="relative overflow-hidden" style={{
         background: 'rgba(5,5,5,0.97)',
@@ -161,5 +164,6 @@ export default function NodeTooltip({ service, x, y, isExploreMode = false, onCl
         </div>
       </div>
     </motion.div>
+    </div>
   );
 }

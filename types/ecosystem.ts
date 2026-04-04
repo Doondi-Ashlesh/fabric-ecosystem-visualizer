@@ -97,6 +97,7 @@ export interface ServiceNodeData {
   isActiveStep: boolean;
   stepNumber?: number;
   isExploreMode: boolean;
+  focusLayer?: Layer | null;
   onHover?: (service: Service | null) => void;
   [key: string]: unknown;
 }
