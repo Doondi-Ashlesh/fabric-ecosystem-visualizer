@@ -16,12 +16,36 @@ Given a user's data or analytics goal, return a step-by-step workflow using ONLY
 VALID SERVICE IDs (use ONLY these — no others):
 ${SERVICE_IDS}
 
-Rules:
-- Include only services that are genuinely required for the goal
-- Order steps logically from data ingestion through to delivery/consumption
-- Each step must have a clear, specific action and a 1-2 sentence detail explaining what the user does in that service
+SERVICE FUNCTION GUIDE — pick based on what each service actually does, not its name:
+- onelake: unified storage foundation only — not a processing or query tool
+- data-factory: batch data movement and pipeline orchestration between systems
+- dataflows-gen2: low-code Power Query transformations, self-service data prep
+- eventstream: capture and route live event/IoT/CDC streams in real time
+- lakehouse: store and query structured/unstructured data with Spark and SQL
+- warehouse: enterprise T-SQL analytics warehouse for structured relational data
+- eventhouse: time-series and telemetry store, queried with KQL, sub-second latency
+- notebook: interactive Spark code (Python/Scala/R) for engineering, ML training, EDA
+- spark-job: scheduled/batch Spark workloads, not interactive
+- data-pipeline: orchestrate and sequence multiple Fabric activities end-to-end
+- ml-experiment: track and compare ML training runs with MLflow
+- ml-model: register, version, and serve trained ML models for scoring
+- real-time-dashboard: live auto-refreshing KQL dashboards from Eventhouse
+- copilot: AI coding assistant for generating code/queries — NOT for alerts or automation
+- data-activator: trigger automated alerts, emails, Teams messages, or pipeline runs when data conditions are met — use this for ANY alerting or notification requirement
+- power-bi: interactive BI reports and dashboards for business users
+- paginated-report: pixel-perfect formatted reports for print/export (invoices, statements)
+- purview: data governance, lineage tracking, sensitivity labels, compliance
+
+STRICT RULES:
+- NEVER use copilot for alerting, notifications, or automation — use data-activator instead
+- NEVER use copilot for orchestration — use data-pipeline or data-factory instead
+- NEVER use ml-experiment for serving predictions — use ml-model instead
+- NEVER use notebook for scheduled batch jobs — use spark-job instead
+- NEVER use onelake as a processing step — it is storage infrastructure, only include it if the goal explicitly requires unified storage setup
+- Only include services genuinely required; do not pad with extras
+- Order steps logically: ingestion → storage → processing → analytics → delivery
 - Minimum 3 steps, maximum 7 steps
-- Difficulty: 'beginner' (1-3 services, simple goal), 'intermediate' (4-5 services), 'advanced' (6-7 services, complex goal)
+- Difficulty: 'beginner' (1-3 steps), 'intermediate' (4-5 steps), 'advanced' (6-7 steps)
 
 Return ONLY valid JSON matching this exact schema:
 {
@@ -30,7 +54,7 @@ Return ONLY valid JSON matching this exact schema:
   "steps": [
     {
       "serviceId": "string — must be one of the valid IDs above",
-      "action": "string — verb phrase (max 3 words, e.g. Ingest, Transform, Store, Analyze, Deploy, Visualize, Govern)",
+      "action": "string — verb phrase (max 3 words, e.g. Ingest, Transform, Store, Score, Alert, Visualize, Govern)",
       "detail": "string — 1-2 sentences explaining what the user does in this service for this specific goal"
     }
   ]
