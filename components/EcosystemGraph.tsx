@@ -47,9 +47,8 @@ export default function EcosystemGraph({
 }: EcosystemGraphProps) {
   const { fitView } = useReactFlow();
 
-  // Tooltip state — hover (default/workflow) and pinned (explore)
+  // Tooltip state — hover only (default/workflow modes); explore mode uses sidebar exclusively
   const [hoverTooltip, setHoverTooltip] = useState<{ service: Service; x: number; y: number } | null>(null);
-  const [exploreTooltip, setExploreTooltip] = useState<{ service: Service; x: number; y: number } | null>(null);
 
   // Track prev focusLayer to detect null transition
   const prevFocusLayer = useRef<Layer | null>(null);
@@ -224,7 +223,6 @@ export default function EcosystemGraph({
   useEffect(() => {
     if (mode === 'initial' || mode === 'explore') {
       setHoverTooltip(null);
-      setExploreTooltip(null);
       fitView({ duration: 600, padding: 0.08 });
     }
   }, [mode, fitView]);
@@ -253,8 +251,7 @@ export default function EcosystemGraph({
       const service = FABRIC_SERVICES.find((s) => s.id === node.id);
       if (!service) return;
       if (mode === 'explore') {
-        setHoverTooltip(null); // clear any stale hover tooltip before showing explore card
-        setExploreTooltip({ service, x: e.clientX, y: e.clientY });
+        setHoverTooltip(null);
         onClickService(service);
       } else {
         onClickService(service);
@@ -264,10 +261,7 @@ export default function EcosystemGraph({
   );
 
   const handlePaneClick = useCallback(() => {
-    if (mode === 'explore') {
-      setExploreTooltip(null);
-      onHoverService(null);
-    }
+    if (mode === 'explore') onHoverService(null);
     setHoverTooltip(null);
   }, [mode, onHoverService]);
 
@@ -309,19 +303,6 @@ export default function EcosystemGraph({
         )}
       </AnimatePresence>
 
-      {/* Pinned card — explore mode */}
-      <AnimatePresence>
-        {exploreTooltip && mode === 'explore' && (
-          <NodeTooltip
-            key={`explore-${exploreTooltip.service.id}`}
-            service={exploreTooltip.service}
-            x={exploreTooltip.x}
-            y={exploreTooltip.y}
-            isExploreMode={true}
-            onClose={() => { setExploreTooltip(null); onHoverService(null); }}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }
