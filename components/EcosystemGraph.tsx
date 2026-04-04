@@ -287,7 +287,7 @@ export default function EcosystemGraph({
         onPaneClick={handlePaneClick}
       >
         <Background variant={BackgroundVariant.Dots} gap={28} size={1} color="#1e293b" />
-        <Controls showInteractive={false} style={{ background: '#111', border: '1px solid #1e293b' }} />
+        <Controls showInteractive={false} />
       </ReactFlow>
 
       {/* Hover tooltip — default / workflow modes */}
