@@ -60,11 +60,11 @@ function ServiceNodeComponent({ data }: NodeProps) {
       className="relative select-none"
       style={{ width: NODE_W + 4, height: NODE_H + 4, cursor: 'pointer', willChange: 'transform, filter, opacity' }}
       animate={{
-        opacity: isDimmed ? 0.38 : isLayerDimmed ? 0.12 : 1,
+        opacity: isDimmed ? 0.12 : isLayerDimmed ? 0.10 : 1,
         filter:  isDimmed
-          ? 'grayscale(0.6) brightness(0.5)'
+          ? 'grayscale(1) brightness(0.2)'
           : isLayerDimmed
-          ? 'grayscale(1) brightness(0.25)'
+          ? 'grayscale(1) brightness(0.2)'
           : glowFilter,
         scale: hovered && !isDimmed && !isLayerDimmed ? 1.06 : isLayerFocused && !hovered ? 1.04 : 1,
       }}
