@@ -2,12 +2,26 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, ChevronRight, ChevronLeft, X, ExternalLink, Compass, Loader2, AlertCircle, Send } from 'lucide-react';
+import { ChevronRight, ChevronLeft, X, ExternalLink, Compass, Loader2, AlertCircle, Send, Sparkles } from 'lucide-react';
 import { LAYER_COLORS, LAYER_LABELS, type AppMode, type Service, type Workflow } from '@/types/ecosystem';
 import { FABRIC_SERVICES } from '@/data/fabric';
 
 const FABRIC_BLUE = '#0078D4';
 const FABRIC_TEAL = '#00B7C3';
+
+// Microsoft 4-square logo SVG
+function MicrosoftLogo({ size = 16 }: { size?: number }) {
+  const half = size / 2 - 1;
+  const gap  = 2;
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
+      <rect x="0"          y="0"          width={half} height={half} fill="#F25022" />
+      <rect x={half + gap} y="0"          width={half} height={half} fill="#7FBA00" />
+      <rect x="0"          y={half + gap} width={half} height={half} fill="#00A4EF" />
+      <rect x={half + gap} y={half + gap} width={half} height={half} fill="#FFB900" />
+    </svg>
+  );
+}
 
 interface SidebarProps {
   mode: AppMode;
@@ -58,73 +72,69 @@ export default function Sidebar({
   }, [handleSubmit]);
 
   const baseClass = `
-    fixed top-0 left-0 h-full w-72 bg-[#0d0d0d] border-r border-[#1a1a1a]
-    flex flex-col z-30 transition-transform duration-300 ease-in-out
+    fixed top-0 left-0 h-full w-72 flex flex-col z-30
+    transition-transform duration-300 ease-in-out
     ${isOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
   `;
 
   return (
-    <div className={baseClass}>
-
+    <div
+      className={baseClass}
+      style={{ background: '#292827', borderRight: '1px solid #3b3a39' }}
+    >
       {/* Close button — mobile */}
       {isOpen && (
         <button
-          className="absolute top-4 right-4 sm:hidden text-slate-400 hover:text-white"
+          className="absolute top-4 right-4 sm:hidden"
+          style={{ color: '#a19f9d' }}
           onClick={onClose}
         >
           <X size={18} />
         </button>
       )}
 
-      {/* Branding */}
-      <div className="px-6 pt-6 pb-5 border-b border-[#1a1a1a] shrink-0">
-        <div className="flex items-center gap-2.5 mb-1">
-          {/* Microsoft Fabric logo mark — F in fabric teal */}
-          <div style={{
-            width: 28, height: 28, borderRadius: 6,
-            background: `linear-gradient(135deg, ${FABRIC_BLUE}, ${FABRIC_TEAL})`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontWeight: 900, fontSize: 15, color: '#fff', fontFamily: 'Inter, sans-serif',
-            letterSpacing: '-0.03em',
-          }}>
-            F
-          </div>
-          <span className="text-[13px] font-black tracking-[0.18em] uppercase leading-none" style={{ color: FABRIC_BLUE }}>
-            MICROSOFT
+      {/* ── Branding ──────────────────────────────────────────────────────── */}
+      <div className="px-5 pt-5 pb-4 shrink-0" style={{ borderBottom: '1px solid #3b3a39' }}>
+        <div className="flex items-center gap-2.5 mb-0.5">
+          <MicrosoftLogo size={16} />
+          <span className="text-[13px] font-semibold" style={{ color: '#f3f2f1', letterSpacing: '0.01em' }}>
+            Microsoft
           </span>
         </div>
-        <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-slate-500 pl-[38px]">
+        <p className="text-[15px] font-semibold pl-[24px]" style={{ color: FABRIC_BLUE }}>
           Fabric Ecosystem
         </p>
       </div>
 
-      {/* Layer legend */}
-      <div className="px-6 py-3 border-b border-[#1a1a1a] shrink-0">
-        <p className="text-[10px] uppercase tracking-widest text-slate-600 font-semibold mb-2">Layers</p>
-        <div className="flex flex-col gap-1">
+      {/* ── Layer legend ──────────────────────────────────────────────────── */}
+      <div className="px-5 py-3 shrink-0" style={{ borderBottom: '1px solid #3b3a39' }}>
+        <p className="text-[10px] uppercase tracking-widest font-semibold mb-2" style={{ color: '#605e5c' }}>
+          Layers
+        </p>
+        <div className="flex flex-col gap-1.5">
           {(Object.entries(LAYER_LABELS) as [keyof typeof LAYER_LABELS, string][]).map(([layer, label]) => (
             <div key={layer} className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: LAYER_COLORS[layer] }} />
-              <span className="text-[11px] text-slate-400">{label}</span>
+              <span className="w-2 h-2 rounded-sm shrink-0" style={{ background: LAYER_COLORS[layer] }} />
+              <span className="text-[11px]" style={{ color: '#a19f9d' }}>{label}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Main panel */}
-      <div className="flex-1 overflow-y-auto px-6 py-5 min-h-0">
+      {/* ── Main panel ────────────────────────────────────────────────────── */}
+      <div className="flex-1 overflow-y-auto px-5 py-5 min-h-0">
         <AnimatePresence mode="wait">
 
-          {/* ── INITIAL ─────────────────────────────────────────────── */}
+          {/* ── INITIAL ─────────────────────────────────────────── */}
           {mode === 'initial' && (
             <motion.div key="initial"
-              initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.18 }}
             >
-              <p className="text-[11px] uppercase tracking-widest font-semibold mb-3" style={{ color: FABRIC_TEAL }}>
+              <p className="text-[11px] uppercase tracking-widest font-semibold mb-2" style={{ color: FABRIC_TEAL }}>
                 AI Goal Generator
               </p>
-              <p className="text-slate-400 text-sm leading-relaxed mb-4">
+              <p className="text-sm leading-relaxed mb-4" style={{ color: '#a19f9d' }}>
                 Describe your data or analytics goal and get a step-by-step Microsoft Fabric workflow instantly.
               </p>
 
@@ -136,20 +146,31 @@ export default function Sidebar({
                   onKeyDown={handleKeyDown}
                   placeholder="e.g. Build a real-time IoT monitoring dashboard..."
                   rows={3}
-                  className="w-full bg-[#111] border border-[#2a2a2a] rounded-lg px-3 py-2.5 text-sm text-slate-200 placeholder-slate-600 resize-none focus:outline-none focus:border-[#0078D4] transition-colors"
+                  className="w-full rounded-md px-3 py-2.5 text-sm resize-none focus:outline-none transition-colors"
+                  style={{
+                    background: '#1b1a19',
+                    border: '1px solid #605e5c',
+                    color: '#f3f2f1',
+                  }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = FABRIC_BLUE; }}
+                  onBlur={(e)  => { e.currentTarget.style.borderColor = '#605e5c'; }}
                 />
                 <button
                   onClick={handleSubmit}
                   disabled={loading || !goal.trim()}
-                  className="absolute bottom-2.5 right-2.5 p-1.5 rounded-md transition-colors disabled:opacity-40"
-                  style={{ background: goal.trim() && !loading ? FABRIC_BLUE : '#1e293b' }}
+                  className="absolute bottom-2.5 right-2.5 p-1.5 rounded transition-opacity disabled:opacity-40"
+                  style={{ background: goal.trim() && !loading ? FABRIC_BLUE : '#3b3a39' }}
                 >
-                  {loading ? <Loader2 size={14} className="animate-spin text-white" /> : <Send size={14} className="text-white" />}
+                  {loading
+                    ? <Loader2 size={14} className="animate-spin" style={{ color: '#fff' }} />
+                    : <Send size={14} style={{ color: '#fff' }} />
+                  }
                 </button>
               </div>
 
               {error && (
-                <div className="flex items-start gap-2 text-red-400 text-xs mb-3 p-2.5 bg-red-950/30 rounded-lg border border-red-900/40">
+                <div className="flex items-start gap-2 text-xs mb-3 p-2.5 rounded"
+                  style={{ background: '#2d1f1f', border: '1px solid #5c2d2d', color: '#f87171' }}>
                   <AlertCircle size={13} className="shrink-0 mt-0.5" />
                   <span>{error}</span>
                 </div>
@@ -157,21 +178,32 @@ export default function Sidebar({
 
               <button
                 onClick={onExplore}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-[#1e293b] text-slate-400 hover:text-white hover:border-[#0078D4] text-sm transition-all"
+                className="w-full flex items-center justify-center gap-2 py-2 rounded text-sm transition-all"
+                style={{ border: '1px solid #3b3a39', color: '#a19f9d' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = FABRIC_BLUE;
+                  e.currentTarget.style.color = '#f3f2f1';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#3b3a39';
+                  e.currentTarget.style.color = '#a19f9d';
+                }}
               >
                 <Compass size={14} />
                 Explore Freely
               </button>
 
-              <p className="text-slate-600 text-xs mt-4 text-center">18 services · 6 layers · official docs</p>
+              <p className="text-xs mt-4 text-center" style={{ color: '#605e5c' }}>
+                18 services · 6 layers · official docs
+              </p>
             </motion.div>
           )}
 
-          {/* ── WORKFLOW ─────────────────────────────────────────────── */}
+          {/* ── WORKFLOW ─────────────────────────────────────────── */}
           {mode === 'workflow' && activeWorkflow && (
             <motion.div key="workflow"
-              initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 12 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}
+              transition={{ duration: 0.18 }}
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-4 gap-2">
@@ -179,13 +211,18 @@ export default function Sidebar({
                   <p className="text-[10px] uppercase tracking-widest font-semibold mb-1" style={{ color: FABRIC_TEAL }}>
                     AI Generated
                   </p>
-                  <p className="text-white font-semibold text-sm leading-snug">{activeWorkflow.goal}</p>
-                  <p className="text-slate-500 text-xs mt-1">
+                  <p className="font-semibold text-sm leading-snug" style={{ color: '#f3f2f1' }}>
+                    {activeWorkflow.goal}
+                  </p>
+                  <p className="text-xs mt-1" style={{ color: '#a19f9d' }}>
                     Step {activeStepIndex + 1} of {activeWorkflow.steps.length} ·{' '}
                     <span className="capitalize">{activeWorkflow.difficulty}</span>
                   </p>
                 </div>
-                <button onClick={onExitWorkflow} className="text-slate-600 hover:text-slate-300 shrink-0 mt-0.5">
+                <button onClick={onExitWorkflow} style={{ color: '#605e5c' }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#f3f2f1'; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#605e5c'; }}
+                  className="shrink-0 mt-0.5 transition-colors">
                   <X size={16} />
                 </button>
               </div>
@@ -200,26 +237,32 @@ export default function Sidebar({
                     <button
                       key={step.serviceId}
                       onClick={() => onStepChange(idx)}
-                      className="w-full text-left p-3 rounded-lg border transition-all"
+                      className="w-full text-left p-3 rounded transition-all"
                       style={{
-                        background: isActive ? `${color}15` : 'transparent',
-                        borderColor: isActive ? `${color}60` : '#1e293b',
+                        background: isActive ? `${color}18` : 'transparent',
+                        border: `1px solid ${isActive ? `${color}55` : '#3b3a39'}`,
                       }}
                     >
                       <div className="flex items-center gap-2 mb-0.5">
                         <span className="w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center shrink-0"
-                          style={{ background: isActive ? color : '#1e293b', color: isActive ? '#fff' : '#64748b' }}>
+                          style={{
+                            background: isActive ? color : '#3b3a39',
+                            color: isActive ? '#fff' : '#605e5c',
+                          }}>
                           {idx + 1}
                         </span>
-                        <span className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: isActive ? color : '#64748b' }}>
+                        <span className="text-[10px] uppercase tracking-widest font-semibold"
+                          style={{ color: isActive ? color : '#605e5c' }}>
                           {step.action}
                         </span>
                       </div>
-                      <p className="text-xs font-semibold text-slate-200 pl-7 leading-snug">
+                      <p className="text-xs font-semibold pl-7 leading-snug" style={{ color: '#f3f2f1' }}>
                         {svc?.name ?? step.serviceId}
                       </p>
                       {isActive && (
-                        <p className="text-xs text-slate-400 pl-7 mt-1 leading-relaxed">{step.detail}</p>
+                        <p className="text-xs pl-7 mt-1 leading-relaxed" style={{ color: '#a19f9d' }}>
+                          {step.detail}
+                        </p>
                       )}
                     </button>
                   );
@@ -231,14 +274,25 @@ export default function Sidebar({
                 <button
                   onClick={() => onStepChange(Math.max(0, activeStepIndex - 1))}
                   disabled={activeStepIndex === 0}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg border border-[#1e293b] text-slate-400 hover:text-white hover:border-[#0078D4] text-xs transition-all disabled:opacity-30"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded text-xs transition-all disabled:opacity-30"
+                  style={{ border: '1px solid #3b3a39', color: '#a19f9d' }}
+                  onMouseEnter={(e) => {
+                    if (!(e.currentTarget as HTMLButtonElement).disabled) {
+                      e.currentTarget.style.borderColor = FABRIC_BLUE;
+                      e.currentTarget.style.color = '#f3f2f1';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#3b3a39';
+                    e.currentTarget.style.color = '#a19f9d';
+                  }}
                 >
                   <ChevronLeft size={13} /> Back
                 </button>
                 <button
                   onClick={() => onStepChange(Math.min(activeWorkflow.steps.length - 1, activeStepIndex + 1))}
                   disabled={activeStepIndex === activeWorkflow.steps.length - 1}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-white text-xs transition-all disabled:opacity-30"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded text-white text-xs transition-all disabled:opacity-30"
                   style={{ background: FABRIC_BLUE }}
                 >
                   Next <ChevronRight size={13} />
@@ -247,17 +301,20 @@ export default function Sidebar({
             </motion.div>
           )}
 
-          {/* ── EXPLORE ──────────────────────────────────────────────── */}
+          {/* ── EXPLORE ──────────────────────────────────────────── */}
           {mode === 'explore' && (
             <motion.div key="explore"
-              initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 12 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}
+              transition={{ duration: 0.18 }}
             >
               <div className="flex items-center justify-between mb-4">
                 <p className="text-[11px] uppercase tracking-widest font-semibold" style={{ color: FABRIC_TEAL }}>
                   Explore Mode
                 </p>
-                <button onClick={onBackToInitial} className="text-slate-600 hover:text-slate-300">
+                <button onClick={onBackToInitial} style={{ color: '#605e5c' }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#f3f2f1'; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#605e5c'; }}
+                  className="transition-colors">
                   <X size={16} />
                 </button>
               </div>
@@ -268,24 +325,34 @@ export default function Sidebar({
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
                     transition={{ duration: 0.15 }}
                   >
-                    {/* Service header */}
-                    <div className="p-4 rounded-xl border mb-3"
-                      style={{ background: `${LAYER_COLORS[hoveredService.layer]}10`, borderColor: `${LAYER_COLORS[hoveredService.layer]}30` }}>
+                    {/* Service header card */}
+                    <div className="p-4 rounded mb-3"
+                      style={{
+                        background: `${LAYER_COLORS[hoveredService.layer]}12`,
+                        border: `1px solid ${LAYER_COLORS[hoveredService.layer]}35`,
+                      }}>
                       <p className="text-[10px] uppercase tracking-widest font-semibold mb-1"
                         style={{ color: LAYER_COLORS[hoveredService.layer] }}>
                         {LAYER_LABELS[hoveredService.layer]}
                       </p>
-                      <p className="text-white font-bold text-base leading-snug mb-1">{hoveredService.name}</p>
-                      <p className="text-slate-400 text-xs leading-relaxed">{hoveredService.shortDescription}</p>
+                      <p className="font-bold text-base leading-snug mb-1" style={{ color: '#f3f2f1' }}>
+                        {hoveredService.name}
+                      </p>
+                      <p className="text-xs leading-relaxed" style={{ color: '#a19f9d' }}>
+                        {hoveredService.shortDescription}
+                      </p>
                     </div>
 
                     {/* Full description */}
-                    <p className="text-slate-300 text-sm leading-relaxed mb-3">{hoveredService.fullDescription}</p>
+                    <p className="text-sm leading-relaxed mb-3" style={{ color: '#c8c6c4' }}>
+                      {hoveredService.fullDescription}
+                    </p>
 
                     {/* Tags */}
                     <div className="flex flex-wrap gap-1.5 mb-4">
                       {hoveredService.tags.map((tag) => (
-                        <span key={tag} className="px-2 py-0.5 rounded-full text-[10px] font-medium border border-[#1e293b] text-slate-400">
+                        <span key={tag} className="px-2 py-0.5 rounded text-[10px] font-medium"
+                          style={{ border: '1px solid #3b3a39', color: '#a19f9d', background: '#323130' }}>
                           {tag}
                         </span>
                       ))}
@@ -293,7 +360,7 @@ export default function Sidebar({
 
                     {/* Docs link */}
                     <a href={hoveredService.officialUrl} target="_blank" rel="noopener noreferrer"
-                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-white text-sm font-medium transition-all"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded text-white text-sm font-medium transition-opacity hover:opacity-90"
                       style={{ background: LAYER_COLORS[hoveredService.layer] }}>
                       Open Official Docs <ExternalLink size={13} />
                     </a>
@@ -303,11 +370,11 @@ export default function Sidebar({
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                     className="flex flex-col items-center justify-center gap-3 pt-8 text-center"
                   >
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                      style={{ background: `${FABRIC_TEAL}20` }}>
+                    <div className="w-10 h-10 rounded flex items-center justify-center"
+                      style={{ background: `${FABRIC_TEAL}18` }}>
                       <Compass size={18} style={{ color: FABRIC_TEAL }} />
                     </div>
-                    <p className="text-slate-500 text-sm leading-relaxed">
+                    <p className="text-sm leading-relaxed" style={{ color: '#a19f9d' }}>
                       Click on any service node to see its official description.
                     </p>
                   </motion.div>
@@ -319,11 +386,11 @@ export default function Sidebar({
         </AnimatePresence>
       </div>
 
-      {/* Footer */}
-      <div className="px-6 py-4 border-t border-[#1a1a1a] shrink-0">
+      {/* ── Footer ─────────────────────────────────────────────────────────── */}
+      <div className="px-5 py-3 shrink-0" style={{ borderTop: '1px solid #3b3a39' }}>
         <div className="flex items-center gap-2">
-          <Sparkles size={12} style={{ color: FABRIC_TEAL }} />
-          <span className="text-[10px] text-slate-600">Powered by Groq · llama-3.3-70b</span>
+          <Sparkles size={11} style={{ color: FABRIC_TEAL }} />
+          <span className="text-[10px]" style={{ color: '#605e5c' }}>Phi-4 · GitHub Models</span>
         </div>
       </div>
     </div>

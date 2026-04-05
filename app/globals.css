@@ -1,19 +1,29 @@
 @import "tailwindcss";
 
+/* ── Microsoft Fluent UI dark theme tokens ──────────────────────────────────── */
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --fabric-blue: #0078D4;
-  --fabric-teal: #00B7C3;
+  --ms-bg:       #201f1e;   /* page background  */
+  --ms-surface:  #292827;   /* sidebar / panels */
+  --ms-surface2: #323130;   /* inputs, cards    */
+  --ms-border:   #3b3a39;   /* dividers         */
+  --ms-border2:  #605e5c;   /* input borders    */
+  --ms-text:     #f3f2f1;   /* primary text     */
+  --ms-text-sub: #a19f9d;   /* secondary text   */
+  --ms-text-dis: #605e5c;   /* disabled / muted */
+  --ms-blue:     #0078D4;   /* Fabric accent     */
+  --ms-teal:     #00B7C3;   /* secondary accent  */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif;
+  background: var(--ms-bg);
+  color: var(--ms-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* React Flow overrides */
-.react-flow__node { cursor: default !important; }
+/* ── React Flow overrides ────────────────────────────────────────────────────── */
+.react-flow__node  { cursor: default !important; }
 .explore-mode .react-flow__pane { cursor: default !important; }
 .react-flow__edge-path { stroke-opacity: 0.3; }
-

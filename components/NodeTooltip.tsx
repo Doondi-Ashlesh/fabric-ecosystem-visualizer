@@ -50,12 +50,12 @@ export default function NodeTooltip({ service, x, y, isExploreMode = false, onCl
         style={{ willChange: 'transform, opacity' }}
       >
         <div style={{
-          background: 'rgba(0,0,0,0.88)',
+          background: 'rgba(41,40,39,0.95)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           border: `1px solid ${color}`,
           borderRadius: 8,
-          boxShadow: `0 0 0 1px ${color}18, 0 0 40px ${color}25, 0 20px 60px rgba(0,0,0,0.95)`,
+          boxShadow: `0 0 0 1px ${color}18, 0 0 40px ${color}25, 0 20px 60px rgba(0,0,0,0.85)`,
         }}>
           <div className="h-[3px] rounded-t-lg" style={{ background: `linear-gradient(90deg, ${color}, ${color}50, transparent)` }} />
           <div className="p-5 space-y-3.5">
@@ -113,10 +113,10 @@ export default function NodeTooltip({ service, x, y, isExploreMode = false, onCl
       style={{ willChange: 'transform, opacity' }}
     >
       <div className="relative overflow-hidden" style={{
-        background: 'rgba(5,5,5,0.97)',
+        background: 'rgba(32,31,30,0.97)',
         border: `1px solid ${color}`,
-        borderRadius: 3,
-        boxShadow: `0 0 0 1px ${color}20, 0 0 24px ${color}20, 0 12px 40px rgba(0,0,0,0.95)`,
+        borderRadius: 4,
+        boxShadow: `0 0 0 1px ${color}20, 0 0 24px ${color}20, 0 12px 40px rgba(0,0,0,0.85)`,
       }}>
         {/* Scanline */}
         <div className="absolute inset-0 pointer-events-none" style={{

@@ -282,11 +282,11 @@ export default function EcosystemGraph({
         minZoom={0.2}
         maxZoom={2}
         proOptions={{ hideAttribution: true }}
-        style={{ background: '#0a0a0a' }}
+        style={{ background: '#201f1e' }}
         onNodeClick={handleNodeClick}
         onPaneClick={handlePaneClick}
       >
-        <Background variant={BackgroundVariant.Dots} gap={28} size={1} color="#1e293b" />
+        <Background variant={BackgroundVariant.Dots} gap={28} size={1} color="#3b3a39" />
         <Controls showInteractive={false} />
         {/* Scoped style — overrides RF's own stylesheet which loads after globals.css */}
         <style>{`
@@ -297,19 +297,19 @@ export default function EcosystemGraph({
             gap: 4px;
           }
           .react-flow__controls-button {
-            background: #0d0d0d !important;
-            border: 1px solid #1e293b !important;
-            border-radius: 6px !important;
+            background: #292827 !important;
+            border: 1px solid #3b3a39 !important;
+            border-radius: 4px !important;
             width: 28px !important;
             height: 28px !important;
             padding: 5px !important;
-            color: #475569 !important;
-            fill: #475569 !important;
+            color: #605e5c !important;
+            fill: #605e5c !important;
             box-shadow: none !important;
             transition: border-color 0.15s, fill 0.15s !important;
           }
           .react-flow__controls-button:hover {
-            background: #0f172a !important;
+            background: #323130 !important;
             border-color: #0078D4 !important;
             fill: #0078D4 !important;
           }

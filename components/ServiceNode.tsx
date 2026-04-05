@@ -37,13 +37,13 @@ function ServiceNodeComponent({ data }: NodeProps) {
     ? `${color}cc`
     : hovered
     ? `${color}66`
-    : '#1e293b';
+    : '#3b3a39';
 
   const bgColor = isActiveStep || isHighlighted
-    ? `${color}12`
+    ? `${color}14`
     : hovered
-    ? `${color}08`
-    : 'rgba(8,8,8,0.88)';
+    ? `${color}0a`
+    : 'rgba(41,40,39,0.92)';
 
   const glowFilter = isActiveStep
     ? `drop-shadow(0 0 14px ${color}) drop-shadow(0 0 28px ${color}80)`
@@ -127,7 +127,7 @@ function ServiceNodeComponent({ data }: NodeProps) {
         <div
           className="absolute -top-1 -right-1 w-[20px] h-[20px] rounded-full flex items-center justify-center text-[10px] font-black z-20"
           style={{
-            background: isActiveStep ? color : '#0d1117',
+            background: isActiveStep ? color : '#292827',
             color:      isActiveStep ? '#fff' : color,
             border:     `1.5px solid ${color}`,
             boxShadow:  isActiveStep ? `0 0 10px ${color}` : 'none',
