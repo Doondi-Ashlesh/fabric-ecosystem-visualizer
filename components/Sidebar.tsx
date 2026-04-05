@@ -9,19 +9,6 @@ import { FABRIC_SERVICES } from '@/data/fabric';
 const FABRIC_BLUE = '#0078D4';
 const FABRIC_TEAL = '#00B7C3';
 
-// Microsoft 4-square logo SVG
-function MicrosoftLogo({ size = 16 }: { size?: number }) {
-  const half = size / 2 - 1;
-  const gap  = 2;
-  return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
-      <rect x="0"          y="0"          width={half} height={half} fill="#F25022" />
-      <rect x={half + gap} y="0"          width={half} height={half} fill="#7FBA00" />
-      <rect x="0"          y={half + gap} width={half} height={half} fill="#00A4EF" />
-      <rect x={half + gap} y={half + gap} width={half} height={half} fill="#FFB900" />
-    </svg>
-  );
-}
 
 interface SidebarProps {
   mode: AppMode;
@@ -96,7 +83,8 @@ export default function Sidebar({
       {/* ── Branding ──────────────────────────────────────────────────────── */}
       <div className="px-5 pt-5 pb-4 shrink-0" style={{ borderBottom: '1px solid #3b3a39' }}>
         <div className="flex items-center gap-2.5 mb-0.5">
-          <MicrosoftLogo size={16} />
+          <img src="/microsoft-logo.png" width={16} height={16} alt="Microsoft" /> 
+          
           <span className="text-[13px] font-semibold" style={{ color: '#f3f2f1', letterSpacing: '0.01em' }}>
             Microsoft
           </span>

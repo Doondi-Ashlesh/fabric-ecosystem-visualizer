@@ -12,17 +12,6 @@ import { FABRIC_SERVICES } from '@/data/fabric';
 const FABRIC_BLUE = '#0078D4';
 const FABRIC_TEAL = '#00B7C3';
 
-// Microsoft 4-square logo (small, for the header)
-function MicrosoftSquares() {
-  return (
-    <svg width={14} height={14} viewBox="0 0 14 14" fill="none" aria-hidden>
-      <rect x="0" y="0" width="6" height="6" fill="#F25022" />
-      <rect x="8" y="0" width="6" height="6" fill="#7FBA00" />
-      <rect x="0" y="8" width="6" height="6" fill="#00A4EF" />
-      <rect x="8" y="8" width="6" height="6" fill="#FFB900" />
-    </svg>
-  );
-}
 
 export default function Home() {
   const [mode, setMode]                       = useState<AppMode>('initial');
@@ -113,7 +102,7 @@ export default function Home() {
 
           {/* Branding crumb — desktop */}
           <div className="hidden sm:flex items-center gap-2 shrink-0">
-            <MicrosoftSquares />
+            <img src="/microsoft-logo.png" width={14} height={14} alt="Microsoft" />
             <span className="text-[12px] font-semibold" style={{ color: '#f3f2f1' }}>Microsoft Fabric</span>
             <span className="text-[12px]" style={{ color: '#605e5c' }}>/</span>
             <span className="text-[12px]" style={{ color: '#a19f9d' }}>Ecosystem Visualizer</span>
