@@ -88,7 +88,7 @@ export default function Sidebar({
             Microsoft
           </span>
         </div>
-        <p className="text-[16px] font-semibold pl-[24px]" style={{ color: FABRIC_BLUE }}>
+        <p className="text-[16px] font-semibold" style={{ color: FABRIC_BLUE }}>
           Fabric Ecosystem
         </p>
       </div>
