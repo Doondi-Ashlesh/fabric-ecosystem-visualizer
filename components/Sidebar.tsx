@@ -243,7 +243,7 @@ export default function Sidebar({
               </div>
 
               {/* Nav */}
-              <div className="flex gap-2">
+              <div className="flex gap-2 mb-3">
                 <button
                   onClick={() => onStepChange(Math.max(0, activeStepIndex - 1))}
                   disabled={activeStepIndex === 0}
@@ -271,6 +271,17 @@ export default function Sidebar({
                   Next <ChevronRight size={13} />
                 </button>
               </div>
+
+              {/* Try a different goal */}
+              <button
+                onClick={onBackToInitial}
+                className="w-full text-center text-[12px] transition-colors py-1"
+                style={{ color: '#605e5c' }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#a19f9d'; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#605e5c'; }}
+              >
+                ← Try a different goal
+              </button>
             </motion.div>
           )}
 
@@ -280,17 +291,15 @@ export default function Sidebar({
               initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}
               transition={{ duration: 0.18 }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-[11px] uppercase tracking-widest font-semibold" style={{ color: FABRIC_TEAL }}>
-                  Explore Mode
-                </p>
-                <button onClick={onBackToInitial} style={{ color: '#605e5c' }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#f3f2f1'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#605e5c'; }}
-                  className="transition-colors">
-                  <X size={16} />
-                </button>
-              </div>
+              <button
+                onClick={onBackToInitial}
+                className="flex items-center gap-1 text-[12px] transition-colors mb-4"
+                style={{ color: '#605e5c' }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = FABRIC_BLUE; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = '#605e5c'; }}
+              >
+                <ChevronLeft size={12} /> Back to goals
+              </button>
 
               <AnimatePresence mode="wait">
                 {hoveredService ? (
