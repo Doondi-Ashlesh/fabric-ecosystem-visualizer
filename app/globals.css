@@ -17,6 +17,7 @@
 body {
   font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system,
     BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
   background: var(--ms-bg);
   color: var(--ms-text);
   -webkit-font-smoothing: antialiased;

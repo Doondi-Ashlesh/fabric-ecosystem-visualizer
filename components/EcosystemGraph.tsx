@@ -297,8 +297,8 @@ export default function EcosystemGraph({
             gap: 4px;
           }
           .react-flow__controls-button {
-            background: #292827 !important;
-            border: 1px solid #3b3a39 !important;
+            background: #111111 !important;
+            border: 1px solid #1e1e1e !important;
             border-radius: 4px !important;
             width: 28px !important;
             height: 28px !important;

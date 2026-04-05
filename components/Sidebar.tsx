@@ -67,7 +67,7 @@ export default function Sidebar({
   return (
     <div
       className={baseClass}
-      style={{ background: '#292827', borderRight: '1px solid #3b3a39' }}
+      style={{ background: '#111111', borderRight: '1px solid #1e1e1e' }}
     >
       {/* Close button — mobile */}
       {isOpen && (
@@ -81,29 +81,28 @@ export default function Sidebar({
       )}
 
       {/* ── Branding ──────────────────────────────────────────────────────── */}
-      <div className="px-5 pt-5 pb-4 shrink-0" style={{ borderBottom: '1px solid #3b3a39' }}>
+      <div className="px-5 pt-5 pb-4 shrink-0" style={{ borderBottom: '1px solid #1e1e1e' }}>
         <div className="flex items-center gap-2.5 mb-0.5">
-          <img src="/microsoft-logo.png" width={16} height={16} alt="Microsoft" /> 
-          
-          <span className="text-[13px] font-semibold" style={{ color: '#f3f2f1', letterSpacing: '0.01em' }}>
+          <img src="/microsoft-logo.png" width={16} height={16} alt="Microsoft" style={{ mixBlendMode: 'screen' }} />
+          <span className="text-[14px] font-semibold" style={{ color: '#f3f2f1', letterSpacing: '0.01em' }}>
             Microsoft
           </span>
         </div>
-        <p className="text-[15px] font-semibold pl-[24px]" style={{ color: FABRIC_BLUE }}>
+        <p className="text-[16px] font-semibold pl-[24px]" style={{ color: FABRIC_BLUE }}>
           Fabric Ecosystem
         </p>
       </div>
 
       {/* ── Layer legend ──────────────────────────────────────────────────── */}
-      <div className="px-5 py-3 shrink-0" style={{ borderBottom: '1px solid #3b3a39' }}>
-        <p className="text-[10px] uppercase tracking-widest font-semibold mb-2" style={{ color: '#605e5c' }}>
+      <div className="px-5 py-3 shrink-0" style={{ borderBottom: '1px solid #1e1e1e' }}>
+        <p className="text-[11px] uppercase tracking-widest font-semibold mb-2" style={{ color: '#605e5c' }}>
           Layers
         </p>
         <div className="flex flex-col gap-1.5">
           {(Object.entries(LAYER_LABELS) as [keyof typeof LAYER_LABELS, string][]).map(([layer, label]) => (
             <div key={layer} className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-sm shrink-0" style={{ background: LAYER_COLORS[layer] }} />
-              <span className="text-[11px]" style={{ color: '#a19f9d' }}>{label}</span>
+              <span className="text-[12px]" style={{ color: '#a19f9d' }}>{label}</span>
             </div>
           ))}
         </div>
@@ -119,10 +118,10 @@ export default function Sidebar({
               initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.18 }}
             >
-              <p className="text-[11px] uppercase tracking-widest font-semibold mb-2" style={{ color: FABRIC_TEAL }}>
+              <p className="text-[12px] uppercase tracking-widest font-semibold mb-2" style={{ color: FABRIC_TEAL }}>
                 AI Goal Generator
               </p>
-              <p className="text-sm leading-relaxed mb-4" style={{ color: '#a19f9d' }}>
+              <p className="text-[14px] leading-relaxed mb-4" style={{ color: '#a19f9d' }}>
                 Describe your data or analytics goal and get a step-by-step Microsoft Fabric workflow instantly.
               </p>
 
@@ -134,9 +133,9 @@ export default function Sidebar({
                   onKeyDown={handleKeyDown}
                   placeholder="e.g. Build a real-time IoT monitoring dashboard..."
                   rows={3}
-                  className="w-full rounded-md px-3 py-2.5 text-sm resize-none focus:outline-none transition-colors"
+                  className="w-full rounded-md px-3 py-2.5 text-[14px] resize-none focus:outline-none transition-colors"
                   style={{
-                    background: '#1b1a19',
+                    background: '#0d0d0d',
                     border: '1px solid #605e5c',
                     color: '#f3f2f1',
                   }}
@@ -147,7 +146,7 @@ export default function Sidebar({
                   onClick={handleSubmit}
                   disabled={loading || !goal.trim()}
                   className="absolute bottom-2.5 right-2.5 p-1.5 rounded transition-opacity disabled:opacity-40"
-                  style={{ background: goal.trim() && !loading ? FABRIC_BLUE : '#3b3a39' }}
+                  style={{ background: goal.trim() && !loading ? FABRIC_BLUE : '#1e1e1e' }}
                 >
                   {loading
                     ? <Loader2 size={14} className="animate-spin" style={{ color: '#fff' }} />
@@ -166,14 +165,14 @@ export default function Sidebar({
 
               <button
                 onClick={onExplore}
-                className="w-full flex items-center justify-center gap-2 py-2 rounded text-sm transition-all"
-                style={{ border: '1px solid #3b3a39', color: '#a19f9d' }}
+                className="w-full flex items-center justify-center gap-2 py-2 rounded text-[14px] transition-all"
+                style={{ border: '1px solid #1e1e1e', color: '#a19f9d' }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = FABRIC_BLUE;
                   e.currentTarget.style.color = '#f3f2f1';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#3b3a39';
+                  e.currentTarget.style.borderColor = '#1e1e1e';
                   e.currentTarget.style.color = '#a19f9d';
                 }}
               >
@@ -181,7 +180,7 @@ export default function Sidebar({
                 Explore Freely
               </button>
 
-              <p className="text-xs mt-4 text-center" style={{ color: '#605e5c' }}>
+              <p className="text-[12px] mt-4 text-center" style={{ color: '#605e5c' }}>
                 18 services · 6 layers · official docs
               </p>
             </motion.div>
@@ -228,13 +227,13 @@ export default function Sidebar({
                       className="w-full text-left p-3 rounded transition-all"
                       style={{
                         background: isActive ? `${color}18` : 'transparent',
-                        border: `1px solid ${isActive ? `${color}55` : '#3b3a39'}`,
+                        border: `1px solid ${isActive ? `${color}55` : '#1e1e1e'}`,
                       }}
                     >
                       <div className="flex items-center gap-2 mb-0.5">
                         <span className="w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center shrink-0"
                           style={{
-                            background: isActive ? color : '#3b3a39',
+                            background: isActive ? color : '#1e1e1e',
                             color: isActive ? '#fff' : '#605e5c',
                           }}>
                           {idx + 1}
@@ -263,7 +262,7 @@ export default function Sidebar({
                   onClick={() => onStepChange(Math.max(0, activeStepIndex - 1))}
                   disabled={activeStepIndex === 0}
                   className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded text-xs transition-all disabled:opacity-30"
-                  style={{ border: '1px solid #3b3a39', color: '#a19f9d' }}
+                  style={{ border: '1px solid #1e1e1e', color: '#a19f9d' }}
                   onMouseEnter={(e) => {
                     if (!(e.currentTarget as HTMLButtonElement).disabled) {
                       e.currentTarget.style.borderColor = FABRIC_BLUE;
@@ -271,7 +270,7 @@ export default function Sidebar({
                     }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#3b3a39';
+                    e.currentTarget.style.borderColor = '#1e1e1e';
                     e.currentTarget.style.color = '#a19f9d';
                   }}
                 >
@@ -340,7 +339,7 @@ export default function Sidebar({
                     <div className="flex flex-wrap gap-1.5 mb-4">
                       {hoveredService.tags.map((tag) => (
                         <span key={tag} className="px-2 py-0.5 rounded text-[10px] font-medium"
-                          style={{ border: '1px solid #3b3a39', color: '#a19f9d', background: '#323130' }}>
+                          style={{ border: '1px solid #1e1e1e', color: '#a19f9d', background: '#323130' }}>
                           {tag}
                         </span>
                       ))}
@@ -375,7 +374,7 @@ export default function Sidebar({
       </div>
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
-      <div className="px-5 py-3 shrink-0" style={{ borderTop: '1px solid #3b3a39' }}>
+      <div className="px-5 py-3 shrink-0" style={{ borderTop: '1px solid #1e1e1e' }}>
         <div className="flex items-center gap-2">
           <Sparkles size={11} style={{ color: FABRIC_TEAL }} />
           <span className="text-[10px]" style={{ color: '#605e5c' }}>Phi-4 · GitHub Models</span>

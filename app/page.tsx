@@ -56,7 +56,7 @@ export default function Home() {
   }, [mode, activeWorkflow]);
 
   return (
-    <div className="fixed inset-0 flex overflow-hidden" style={{ background: '#201f1e' }}>
+    <div className="fixed inset-0 flex overflow-hidden" style={{ background: '#0a0a0a' }}>
 
       {/* Mobile backdrop */}
       {sidebarOpen && (
@@ -87,7 +87,7 @@ export default function Home() {
         {/* ── Top bar ──────────────────────────────────────────────────────── */}
         <div
           className="h-11 flex items-center px-4 sm:px-5 gap-3 shrink-0"
-          style={{ background: '#292827', borderBottom: '1px solid #3b3a39' }}
+          style={{ background: '#111111', borderBottom: '1px solid #1e1e1e' }}
         >
           {/* Hamburger — mobile */}
           <button
@@ -102,26 +102,26 @@ export default function Home() {
 
           {/* Branding crumb — desktop */}
           <div className="hidden sm:flex items-center gap-2 shrink-0">
-            <img src="/microsoft-logo.png" width={14} height={14} alt="Microsoft" />
-            <span className="text-[12px] font-semibold" style={{ color: '#f3f2f1' }}>Microsoft Fabric</span>
-            <span className="text-[12px]" style={{ color: '#605e5c' }}>/</span>
-            <span className="text-[12px]" style={{ color: '#a19f9d' }}>Ecosystem Visualizer</span>
+            <img src="/microsoft-logo.png" width={16} height={16} alt="Microsoft" style={{ mixBlendMode: 'screen' }} />
+            <span className="text-[13px] font-semibold" style={{ color: '#f3f2f1' }}>Microsoft Fabric</span>
+            <span className="text-[13px]" style={{ color: '#605e5c' }}>/</span>
+            <span className="text-[13px]" style={{ color: '#a19f9d' }}>Ecosystem Visualizer</span>
           </div>
 
           {/* Mode indicator */}
           <div className="flex-1 min-w-0 hidden lg:block">
             {mode === 'initial' && (
-              <span className="text-[11px]" style={{ color: '#605e5c' }}>
+              <span className="text-[12px]" style={{ color: '#605e5c' }}>
                 Describe your goal or explore all 18 services
               </span>
             )}
             {mode === 'explore' && (
-              <span className="text-[11px] font-semibold" style={{ color: FABRIC_TEAL }}>
+              <span className="text-[12px] font-semibold" style={{ color: FABRIC_TEAL }}>
                 Explore Mode — click any node
               </span>
             )}
             {mode === 'workflow' && activeWorkflow && (
-              <span className="text-[11px] font-semibold truncate block" style={{ color: FABRIC_BLUE }}>
+              <span className="text-[12px] font-semibold truncate block" style={{ color: FABRIC_BLUE }}>
                 {activeWorkflow.goal}
               </span>
             )}
@@ -130,26 +130,26 @@ export default function Home() {
           {/* Nav links */}
           <div className="ml-auto hidden lg:flex items-center gap-5 shrink-0">
             <a href="https://learn.microsoft.com/en-us/fabric/" target="_blank" rel="noopener noreferrer"
-              className="text-[12px] transition-colors"
+              className="text-[13px] transition-colors"
               style={{ color: '#a19f9d' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#f3f2f1'; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#a19f9d'; }}>
               Docs
             </a>
             <a href="https://blog.fabric.microsoft.com" target="_blank" rel="noopener noreferrer"
-              className="text-[12px] transition-colors"
+              className="text-[13px] transition-colors"
               style={{ color: '#a19f9d' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#f3f2f1'; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#a19f9d'; }}>
               Blog
             </a>
             <a href="https://community.fabric.microsoft.com" target="_blank" rel="noopener noreferrer"
-              className="text-[12px] transition-colors font-medium"
+              className="text-[13px] transition-colors font-medium"
               style={{ color: FABRIC_TEAL }}>
               Community
             </a>
             <a href="https://learn.microsoft.com/en-us/training/browse/?products=fabric" target="_blank" rel="noopener noreferrer"
-              className="text-[12px] transition-colors"
+              className="text-[13px] transition-colors"
               style={{ color: '#a19f9d' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#f3f2f1'; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#a19f9d'; }}>
@@ -161,7 +161,7 @@ export default function Home() {
         {/* ── Layer headers ────────────────────────────────────────────────── */}
         <div
           className="hidden sm:flex h-12 shrink-0 items-stretch"
-          style={{ background: '#252423', borderBottom: '1px solid #3b3a39' }}
+          style={{ background: '#111111', borderBottom: '1px solid #1e1e1e' }}
         >
           {LAYER_ORDER.map((layer) => {
             const count    = FABRIC_SERVICES.filter((s) => s.layer === layer).length;
@@ -173,7 +173,7 @@ export default function Home() {
                 className="flex-1 flex flex-col items-center justify-center px-2 cursor-pointer transition-all duration-150 relative"
                 style={{
                   background: isActive ? `${color}14` : 'transparent',
-                  borderRight: '1px solid #3b3a39',
+                  borderRight: '1px solid #1e1e1e',
                 }}
                 onMouseEnter={() => setFocusLayer(layer)}
                 onMouseLeave={() => setFocusLayer(null)}
@@ -186,15 +186,15 @@ export default function Home() {
                   />
                 )}
                 <p
-                  className="text-[11px] font-semibold truncate transition-colors duration-150"
+                  className="text-[12px] font-semibold truncate transition-colors duration-150"
                   style={{ color: isActive ? color : '#a19f9d' }}
                 >
                   {LAYER_LABELS[layer]}
                 </p>
-                <p className="text-[9px] truncate mt-0.5" style={{ color: '#605e5c' }}>
+                <p className="text-[10px] truncate mt-0.5" style={{ color: '#605e5c' }}>
                   {LAYER_SUBLABELS[layer]}
                 </p>
-                <p className="text-[9px] font-medium mt-0.5" style={{ color: `${color}99` }}>
+                <p className="text-[10px] font-medium mt-0.5" style={{ color: `${color}99` }}>
                   {count} service{count !== 1 ? 's' : ''}
                 </p>
               </div>
