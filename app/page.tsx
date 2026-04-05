@@ -100,14 +100,6 @@ export default function Home() {
             <Menu size={18} />
           </button>
 
-          {/* Branding crumb — desktop */}
-          <div className="hidden sm:flex items-center gap-2 shrink-0">
-            <img src="/microsoft-logo.png" width={16} height={16} alt="Microsoft" style={{ mixBlendMode: 'screen' }} />
-            <span className="text-[13px] font-semibold" style={{ color: '#f3f2f1' }}>Microsoft Fabric</span>
-            <span className="text-[13px]" style={{ color: '#605e5c' }}>/</span>
-            <span className="text-[13px]" style={{ color: '#a19f9d' }}>Ecosystem Visualizer</span>
-          </div>
-
           {/* Mode indicator */}
           <div className="flex-1 min-w-0 hidden lg:block">
             {mode === 'initial' && (
