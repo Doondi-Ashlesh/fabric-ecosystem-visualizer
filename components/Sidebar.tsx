@@ -82,7 +82,7 @@ export default function Sidebar({
 
       {/* ── Branding ──────────────────────────────────────────────────────── */}
       <div className="px-5 pt-5 pb-4 shrink-0" style={{ borderBottom: '1px solid #1e1e1e' }}>
-        <div className="flex items-center gap-2.5 mb-0.5">
+        <div className="flex items-center gap-1.5 mb-0.5">
           <img src="/microsoft-logo.png" width={16} height={16} alt="Microsoft" style={{ mixBlendMode: 'screen' }} />
           <span className="text-[14px] font-semibold" style={{ color: '#f3f2f1', letterSpacing: '0.01em' }}>
             Microsoft
