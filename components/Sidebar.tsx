@@ -93,20 +93,6 @@ export default function Sidebar({
         </p>
       </div>
 
-      {/* ── Layer legend ──────────────────────────────────────────────────── */}
-      <div className="px-5 py-3 shrink-0" style={{ borderBottom: '1px solid #1e1e1e' }}>
-        <p className="text-[11px] uppercase tracking-widest font-semibold mb-2" style={{ color: '#605e5c' }}>
-          Layers
-        </p>
-        <div className="flex flex-col gap-1.5">
-          {(Object.entries(LAYER_LABELS) as [keyof typeof LAYER_LABELS, string][]).map(([layer, label]) => (
-            <div key={layer} className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-sm shrink-0" style={{ background: LAYER_COLORS[layer] }} />
-              <span className="text-[12px]" style={{ color: '#a19f9d' }}>{label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* ── Main panel ────────────────────────────────────────────────────── */}
       <div className="flex-1 overflow-y-auto px-5 py-5 min-h-0">
