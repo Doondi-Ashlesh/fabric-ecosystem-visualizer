@@ -15,7 +15,7 @@ const FABRIC_TEAL = '#00B7C3';
 // Microsoft 4-square logo (small, for the header)
 function MicrosoftSquares() {
   return (
-    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" aria-hidden>
+    <svg width={14} height={14} viewBox="0 0 14 14" fill="none" aria-hidden>
       <rect x="0" y="0" width="6" height="6" fill="#F25022" />
       <rect x="8" y="0" width="6" height="6" fill="#7FBA00" />
       <rect x="0" y="8" width="6" height="6" fill="#00A4EF" />
